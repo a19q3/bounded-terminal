@@ -24,6 +24,12 @@ check_tool() {
     expected=$(pinned_rev "$var")
     [ -n "$expected" ] || fail "missing pinned revision for $var"
 
+    if [ "${VERIFY_PINS_FETCH:-1}" = "1" ]; then
+        git -C "$repo" fetch --quiet origin main || fail "$tool fetch failed"
+    else
+        printf '%s fetch skipped because VERIFY_PINS_FETCH=0\n' "$tool"
+    fi
+
     actual=$(git -C "$repo" rev-parse HEAD)
     if [ "$actual" != "$expected" ]; then
         fail "$tool pin mismatch: install.sh has $expected but local HEAD is $actual"

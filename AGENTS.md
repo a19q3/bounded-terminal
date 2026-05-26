@@ -73,11 +73,13 @@ git diff --check
 
 It also runs shell syntax checks and the self-hosting composition test.
 
-The production gate also checks that `install.sh` pins match the current sibling repo heads and that the sibling tool repos are clean and synced with their remotes:
+The production gate also checks that `install.sh` pins match the current sibling repo heads, that fresh remote refs have been fetched, that sibling tool repos are clean and synced with their remotes, and that the umbrella repository itself is clean:
 
 ```sh
 sh scripts/verify-pins.sh
 ```
+
+If the local sandbox cannot reach GitHub, use `VERIFY_PINS_FETCH=0 sh scripts/verify-pins.sh` only as an offline fallback and state that remote freshness was not rechecked in that run.
 
 ## Efficiency Evidence
 

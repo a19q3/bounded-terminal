@@ -31,6 +31,12 @@ check_tool() {
     )
 }
 
+check_umbrella_clean() {
+    status=$(git -C "$ROOT_DIR" status --short)
+    [ -z "$status" ] || fail "umbrella repository is not clean:
+$status"
+}
+
 main() {
     require cargo
     require git
@@ -45,6 +51,7 @@ main() {
     sh -n "$ROOT_DIR/scripts/verify-pins.sh"
     sh "$ROOT_DIR/scripts/verify-pins.sh"
     sh "$ROOT_DIR/scripts/self-host-check.sh"
+    check_umbrella_clean
 
     printf 'production check passed\n'
 }
