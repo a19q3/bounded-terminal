@@ -32,9 +32,12 @@ After:
 span src/lib.rs:128
 span --contains "unwrap()" src/
 span --symbol verify_proof_plan crates/
+span --backend auto --symbol verify_proof_plan crates/
 ```
 
 `span` returns the containing block or a bounded line-window fallback.
+
+When `ast-outline` or `ast-bro` is installed, `--backend auto` can delegate a known symbol body to the stronger AST tool while keeping `span` as the bounded front door.
 
 ## File Effects
 
@@ -71,4 +74,3 @@ cat blob.bin | tap --hexdump | parser
 ```
 
 `tap` preserves stdout byte-for-byte and writes observations to stderr.
-

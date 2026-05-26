@@ -46,11 +46,13 @@ Use these rules during all future optimisation work:
 
 1. Potentially large commands go through `cap`.
 2. Known source locations, symbols, or patterns are inspected with `span` before reading whole files.
-3. Commands that may create, modify, delete, format, generate, install, migrate, or rewrite files go through `fx --quiet` or are followed by an `fx` receipt.
-4. Pipeline debugging uses `tap`; do not dump large intermediate files merely to inspect shape.
-5. JSON or receipt modes are preferred when another agent step will consume the result.
-6. Do not hide wrapped command failures. Preserve and report exit codes.
-7. Do not add heavy dependencies unless they materially improve correctness.
+3. Use `span --backend auto` when `ast-outline` or `ast-bro` is installed and a stronger symbol body extractor is useful.
+4. Use `ast-outline` or `ast-bro` directly for repo outlines, graphs, semantic search, or structural rewrites; wrap noisy runs with `cap` and mutating runs with `fx`.
+5. Commands that may create, modify, delete, format, generate, install, migrate, or rewrite files go through `fx --quiet` or are followed by an `fx` receipt.
+6. Pipeline debugging uses `tap`; do not dump large intermediate files merely to inspect shape.
+7. JSON or receipt modes are preferred when another agent step will consume the result.
+8. Do not hide wrapped command failures. Preserve and report exit codes.
+9. Do not add heavy dependencies unless they materially improve correctness.
 
 ## Production Gate
 

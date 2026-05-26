@@ -7,12 +7,14 @@ Use these rules in `AGENTS.md`, Codex instructions, Claude Code instructions, Cu
 2. Prefer cap --focus error for failing builds and tests after the first noisy run.
 3. Use rg/fd to locate candidates, then span for syntax-bounded context.
 4. Do not read whole source files when FILE:LINE, --contains, or --symbol can identify the relevant block.
-5. Use fx around commands that may generate, rewrite, install, test, or migrate files.
-6. Use fx --receipt when later reasoning needs a stable file-effect record.
-7. Use tap for pipeline inspection; do not dump large intermediate files unless required.
-8. Treat cap logs as redacted evidence by default, not secret storage.
-9. Do not add heavy dependencies to these tools without a correctness justification.
-10. Preserve wrapped command exit codes.
+5. Use span's external AST backend only when a stronger installed tool is useful: `span --backend auto ...`.
+6. Use ast-outline/ast-bro directly for outlines, graphs, semantic search, or structural rewrites; wrap noisy runs with cap and mutating runs with fx.
+7. Use fx around commands that may generate, rewrite, install, test, or migrate files.
+8. Use fx --receipt when later reasoning needs a stable file-effect record.
+9. Use tap for pipeline inspection; do not dump large intermediate files unless required.
+10. Treat cap logs as redacted evidence by default, not secret storage.
+11. Do not add heavy dependencies to these tools without a correctness justification.
+12. Preserve wrapped command exit codes.
 ```
 
 ## Suggested Codex Rule
@@ -21,8 +23,8 @@ Use these rules in `AGENTS.md`, Codex instructions, Claude Code instructions, Cu
 For terminal work, prefer bounded-terminal tools:
 - cap for noisy commands;
 - span for code context;
+- ast-outline/ast-bro for deeper AST intelligence when installed;
 - fx for side-effect observation;
 - tap for pipeline inspection.
 Keep command output bounded and prefer receipts when results will be consumed later.
 ```
-
