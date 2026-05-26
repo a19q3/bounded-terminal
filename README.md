@@ -22,10 +22,10 @@ Planned:
 ## Quick Start
 
 ```sh
-cargo install --git https://github.com/a19q3/cap.git
-cargo install --git https://github.com/a19q3/span.git
-cargo install --git https://github.com/a19q3/fx.git
-cargo install --git https://github.com/a19q3/tap.git
+cargo install --git https://github.com/a19q3/cap.git --rev 95e6410d28079d749c1660e0bbc41b14acd69430
+cargo install --git https://github.com/a19q3/span.git --rev 3df186cd3d7fcc9254cbd4f958ab8537554dfdb5
+cargo install --git https://github.com/a19q3/fx.git --rev b173721bd8ad0a77f0c6404e9bdc9a0d57e683ff
+cargo install --git https://github.com/a19q3/tap.git --rev 04d40f351b206bb48d23dd72fd3525ce24894f5a
 ```
 
 Or use:
@@ -33,6 +33,8 @@ Or use:
 ```sh
 sh install.sh
 ```
+
+The installer pins audited commits by default. Override `CAP_REV`, `SPAN_REV`, `FX_REV`, or `TAP_REV` only when deliberately testing a different revision.
 
 ## Agent Rules
 
@@ -68,4 +70,3 @@ These tools reduce accidental verbosity, accidental scope expansion, and acciden
 - [Examples](docs/examples.md)
 - [Token-Saving Benchmark Plan](docs/token-saving-benchmark.md)
 - [Release Checklist](docs/release-checklist.md)
-
