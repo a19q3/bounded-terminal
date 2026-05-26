@@ -22,10 +22,10 @@ Planned:
 ## Quick Start
 
 ```sh
-cargo install --git https://github.com/a19q3/cap.git --rev 42a4cd43ceeeef8d5fed804445ebe62134687f2d
-cargo install --git https://github.com/a19q3/span.git --rev d5b79ed5f7a6f9f116334797d3c48494535121b5
-cargo install --git https://github.com/a19q3/fx.git --rev b2d63b4c77d8e8c425b2387f7aa3c4657342594b
-cargo install --git https://github.com/a19q3/tap.git --rev b7b3c88049d85b22f91e152b61843c10b2cce944
+cargo install --git https://github.com/a19q3/cap.git --rev 485f8c35693f661e6dba68c1dd7cad223b7fedd1
+cargo install --git https://github.com/a19q3/span.git --rev 6b5d775b6a6d18c883d162ee295b4b91e359dff0
+cargo install --git https://github.com/a19q3/fx.git --rev eb77c5a0a6043ee0a7a67880fbac6ae3dcdb0ffb
+cargo install --git https://github.com/a19q3/tap.git --rev 5429bfb57216d9df26ad257d676564dba1e94c19
 ```
 
 Or use:

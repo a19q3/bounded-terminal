@@ -18,10 +18,10 @@ install_tool() {
 
 require cargo
 
-CAP_REV=${CAP_REV:-42a4cd43ceeeef8d5fed804445ebe62134687f2d}
-SPAN_REV=${SPAN_REV:-d5b79ed5f7a6f9f116334797d3c48494535121b5}
-FX_REV=${FX_REV:-b2d63b4c77d8e8c425b2387f7aa3c4657342594b}
-TAP_REV=${TAP_REV:-b7b3c88049d85b22f91e152b61843c10b2cce944}
+CAP_REV=${CAP_REV:-485f8c35693f661e6dba68c1dd7cad223b7fedd1}
+SPAN_REV=${SPAN_REV:-6b5d775b6a6d18c883d162ee295b4b91e359dff0}
+FX_REV=${FX_REV:-eb77c5a0a6043ee0a7a67880fbac6ae3dcdb0ffb}
+TAP_REV=${TAP_REV:-5429bfb57216d9df26ad257d676564dba1e94c19}
 
 install_tool cap https://github.com/a19q3/cap.git "$CAP_REV"
 install_tool span https://github.com/a19q3/span.git "$SPAN_REV"
