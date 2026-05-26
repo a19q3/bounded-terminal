@@ -24,6 +24,30 @@ exit code preserved: yes/no
 manual usefulness notes
 ```
 
+## Self-Hosting Canary
+
+Run:
+
+```sh
+sh scripts/self-host-check.sh
+```
+
+The script records a synthetic canary report at:
+
+```text
+reports/self-host/latest.json
+```
+
+Use this report as a regression guard for:
+
+- visible output reduction from `cap`;
+- line-context reduction from `span`;
+- stdout integrity from `tap`;
+- file-effect summary correctness from `fx`;
+- basic `cap` + `fx` composition.
+
+These numbers are allowed in development notes. Do not use them as public productivity claims without a real workflow measurement.
+
 ## Example Table
 
 | Scenario | Raw bytes | Bounded bytes | Evidence preserved | Notes |
@@ -35,4 +59,3 @@ manual usefulness notes
 ## Rule
 
 Say “reduces accidental context expansion” unless the saving is measured.
-

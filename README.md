@@ -55,6 +55,22 @@ fx --receipt .fx/receipts/latest.json -- cargo test
 cat events.jsonl | tap --json-shape | jq '.level'
 ```
 
+## Self-Hosting Checks
+
+Run the composition and efficiency smoke check:
+
+```sh
+sh scripts/self-host-check.sh
+```
+
+It builds the sibling tool repos, verifies cross-tool behaviour, and writes measured context-reduction evidence to `reports/self-host/latest.json`.
+
+Before a production-ready release, run:
+
+```sh
+sh scripts/production-check.sh
+```
+
 ## Positioning
 
 The thesis is narrow on purpose:
