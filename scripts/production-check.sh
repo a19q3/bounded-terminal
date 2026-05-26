@@ -42,6 +42,8 @@ main() {
 
     sh -n "$ROOT_DIR/install.sh"
     sh -n "$ROOT_DIR/scripts/self-host-check.sh"
+    sh -n "$ROOT_DIR/scripts/verify-pins.sh"
+    sh "$ROOT_DIR/scripts/verify-pins.sh"
     sh "$ROOT_DIR/scripts/self-host-check.sh"
 
     printf 'production check passed\n'

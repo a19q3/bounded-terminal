@@ -24,5 +24,6 @@ Umbrella checks:
 - `docs/agent-rules.md` matches the individual repo guidance.
 - Benchmark document avoids unmeasured marketing claims.
 - `sh scripts/self-host-check.sh` passes and writes `reports/self-host/latest.json`.
+- `sh scripts/verify-pins.sh` confirms `install.sh` pins match clean, synced sibling repos.
 - `sh scripts/production-check.sh` passes before a production-ready tag.
 - `AGENTS.md` self-hosting rules match the current tool contracts.

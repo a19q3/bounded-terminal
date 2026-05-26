@@ -71,6 +71,12 @@ Before a production-ready release, run:
 sh scripts/production-check.sh
 ```
 
+To check installer pin hygiene directly:
+
+```sh
+sh scripts/verify-pins.sh
+```
+
 ## Positioning
 
 The thesis is narrow on purpose:

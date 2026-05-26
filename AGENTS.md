@@ -71,6 +71,12 @@ git diff --check
 
 It also runs shell syntax checks and the self-hosting composition test.
 
+The production gate also checks that `install.sh` pins match the current sibling repo heads and that the sibling tool repos are clean and synced with their remotes:
+
+```sh
+sh scripts/verify-pins.sh
+```
+
 ## Efficiency Evidence
 
 Do not claim efficiency improvement without measurement. The accepted minimum evidence is the latest self-host report:
@@ -99,8 +105,9 @@ Use this loop:
 4. Use `fx --quiet` around risky mutations.
 5. Use `tap` for stream or JSONL debugging.
 6. Run focused tool tests.
-7. Run `sh scripts/production-check.sh`.
-8. Summarise changed behaviour, test results, and latest efficiency metrics.
+7. Push tool repo commits before updating or relying on pinned installer revisions.
+8. Run `sh scripts/production-check.sh`.
+9. Summarise changed behaviour, test results, pin status, and latest efficiency metrics.
 
 ## Limits
 
