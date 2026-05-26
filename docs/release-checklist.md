@@ -25,5 +25,5 @@ Umbrella checks:
 - Benchmark document avoids unmeasured marketing claims.
 - `sh scripts/self-host-check.sh` passes and writes `reports/self-host/latest.json`.
 - `sh scripts/verify-pins.sh` confirms `install.sh` pins match clean, synced sibling repos.
-- `sh scripts/production-check.sh` passes before a production-ready tag.
+- `sh scripts/production-check.sh` passes before a production-ready tag. Run it directly, not under `cap`, because it already invokes `cap` internally.
 - `AGENTS.md` self-hosting rules match the current tool contracts.

@@ -60,6 +60,8 @@ Before calling a change production-ready, run:
 sh scripts/production-check.sh
 ```
 
+Run this command directly. Do not wrap `production-check.sh` or `self-host-check.sh` in `cap`, because those scripts already exercise `cap` internally and nested `cap` runs can distort the self-host canary on macOS.
+
 The gate runs, for each tool:
 
 ```sh

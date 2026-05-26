@@ -23,7 +23,7 @@ Planned:
 
 ```sh
 cargo install --git https://github.com/a19q3/cap.git --rev 95e6410d28079d749c1660e0bbc41b14acd69430
-cargo install --git https://github.com/a19q3/span.git --rev 3df186cd3d7fcc9254cbd4f958ab8537554dfdb5
+cargo install --git https://github.com/a19q3/span.git --rev ea14966e83cd9a0fda0d353adc466d772af76a05
 cargo install --git https://github.com/a19q3/fx.git --rev b173721bd8ad0a77f0c6404e9bdc9a0d57e683ff
 cargo install --git https://github.com/a19q3/tap.git --rev 04d40f351b206bb48d23dd72fd3525ce24894f5a
 ```

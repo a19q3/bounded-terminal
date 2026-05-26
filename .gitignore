@@ -1,4 +1,5 @@
 target/
 .DS_Store
+/.cap/
 /.self-host/
 /reports/self-host/
