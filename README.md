@@ -25,7 +25,7 @@ Planned:
 cargo install --git https://github.com/a19q3/cap.git --rev 485f8c35693f661e6dba68c1dd7cad223b7fedd1
 cargo install --git https://github.com/a19q3/span.git --rev 6b5d775b6a6d18c883d162ee295b4b91e359dff0
 cargo install --git https://github.com/a19q3/fx.git --rev 99a293c3b7594db745e61559eb4d462618829046
-cargo install --git https://github.com/a19q3/tap.git --rev 5429bfb57216d9df26ad257d676564dba1e94c19
+cargo install --git https://github.com/a19q3/tap.git --rev 7c2e7c8b3db9aa3ef204d3ad1aa01a881de5f242
 ```
 
 Or use:
