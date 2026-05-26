@@ -94,9 +94,11 @@ check_cap() {
 check_span() {
     work=$1
     span_out="$work/span.out"
+    span_auto_json="$work/span-auto.json"
+    span_doctor_json="$work/span-doctor.json"
     source_file="$PARENT_DIR/cap/src/main.rs"
 
-    PATH="$BIN_DIR:$PATH" span --symbol run_command "$PARENT_DIR/cap/src" > "$span_out"
+    PATH="$BIN_DIR:$PATH" span --backend heuristic --symbol run_command "$PARENT_DIR/cap/src" > "$span_out"
 
     range=$(sed -n 's/^range: \([0-9][0-9]*\)\.\.\([0-9][0-9]*\)$/\1 \2/p' "$span_out" | head -n 1)
     [ -n "$range" ] || fail "span did not report a range"
@@ -110,8 +112,36 @@ check_span() {
     [ "$span_lines" -lt "$full_lines" ] || fail "span did not reduce source context"
 
     SPAN_FULL_LINES=$full_lines
-    SPAN_LINES=$span_lines
-    SPAN_SAVED=$(percent_saved "$full_lines" "$span_lines")
+    SPAN_HEURISTIC_LINES=$span_lines
+    SPAN_HEURISTIC_SAVED=$(percent_saved "$full_lines" "$span_lines")
+
+    PATH="$BIN_DIR:$PATH" span backend doctor --json > "$span_doctor_json"
+    if grep '"name":"ast-outline","binary":"ast-outline","available":true' "$span_doctor_json" >/dev/null; then
+        AST_OUTLINE_AVAILABLE=true
+    else
+        AST_OUTLINE_AVAILABLE=false
+    fi
+    if grep '"name":"ast-bro","binary":"ast-bro","available":true' "$span_doctor_json" >/dev/null; then
+        AST_BRO_AVAILABLE=true
+    else
+        AST_BRO_AVAILABLE=false
+    fi
+
+    PATH="$BIN_DIR:$PATH" span --backend auto --max-lines 20 --json --symbol run_command "$PARENT_DIR/cap/src" > "$span_auto_json"
+    SPAN_AUTO_BACKEND=$(json_string backend "$span_auto_json")
+    [ -n "$SPAN_AUTO_BACKEND" ] || fail "span auto did not report backend"
+
+    auto_range=$(sed -n 's/.*"range":\[\([0-9][0-9]*\),\([0-9][0-9]*\)\].*/\1 \2/p' "$span_auto_json" | head -n 1)
+    [ -n "$auto_range" ] || fail "span auto did not report a range"
+    auto_start=$(printf '%s\n' "$auto_range" | sed 's/ .*//')
+    auto_end=$(printf '%s\n' "$auto_range" | sed 's/.* //')
+    SPAN_AUTO_LINES=$((auto_end - auto_start + 1))
+    SPAN_AUTO_SAVED=$(percent_saved "$full_lines" "$SPAN_AUTO_LINES")
+    if grep '"truncated":true' "$span_auto_json" >/dev/null; then
+        SPAN_AUTO_TRUNCATED=true
+    else
+        SPAN_AUTO_TRUNCATED=false
+    fi
 }
 
 check_fx() {
@@ -188,7 +218,7 @@ write_report() {
     mkdir -p "$REPORT_DIR"
     generated_at=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
     cat > "$REPORT_FILE" <<EOF
-{"generated_at":"$generated_at","cap":{"raw_bytes":$CAP_TOTAL,"visible_bytes":$CAP_SHOWN,"visible_reduction_percent":$CAP_SAVED},"span":{"full_file_lines":$SPAN_FULL_LINES,"span_lines":$SPAN_LINES,"line_reduction_percent":$SPAN_SAVED},"fx":{"effect_count":$FX_EFFECTS,"source_and_lockfile_summary_ok":true},"tap":{"bytes":$TAP_BYTES,"pass_through_ok":true},"composition":{"cap_fx_total_bytes":$COMPOSED_TOTAL,"cap_fx_visible_bytes":$COMPOSED_SHOWN,"ok":true}}
+{"generated_at":"$generated_at","environment":{"ast_outline":{"available":$AST_OUTLINE_AVAILABLE},"ast_bro":{"available":$AST_BRO_AVAILABLE}},"cap":{"raw_bytes":$CAP_TOTAL,"visible_bytes":$CAP_SHOWN,"visible_reduction_percent":$CAP_SAVED},"span":{"full_file_lines":$SPAN_FULL_LINES,"heuristic":{"span_lines":$SPAN_HEURISTIC_LINES,"line_reduction_percent":$SPAN_HEURISTIC_SAVED},"auto":{"backend":"$SPAN_AUTO_BACKEND","span_lines":$SPAN_AUTO_LINES,"line_reduction_percent":$SPAN_AUTO_SAVED,"truncated":$SPAN_AUTO_TRUNCATED}},"fx":{"effect_count":$FX_EFFECTS,"source_and_lockfile_summary_ok":true},"tap":{"bytes":$TAP_BYTES,"pass_through_ok":true},"composition":{"cap_fx_total_bytes":$COMPOSED_TOTAL,"cap_fx_visible_bytes":$COMPOSED_SHOWN,"ok":true}}
 EOF
     cat "$REPORT_FILE" >> "$HISTORY_FILE"
 }
@@ -217,7 +247,8 @@ main() {
     printf 'self-host check passed\n'
     printf 'report: %s\n' "$REPORT_FILE"
     printf 'cap visible reduction: %s%% (%s -> %s bytes)\n' "$CAP_SAVED" "$CAP_TOTAL" "$CAP_SHOWN"
-    printf 'span line reduction: %s%% (%s -> %s lines)\n' "$SPAN_SAVED" "$SPAN_FULL_LINES" "$SPAN_LINES"
+    printf 'span heuristic line reduction: %s%% (%s -> %s lines)\n' "$SPAN_HEURISTIC_SAVED" "$SPAN_FULL_LINES" "$SPAN_HEURISTIC_LINES"
+    printf 'span auto backend: %s, reduction: %s%%, truncated: %s\n' "$SPAN_AUTO_BACKEND" "$SPAN_AUTO_SAVED" "$SPAN_AUTO_TRUNCATED"
 }
 
 main "$@"

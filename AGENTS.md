@@ -94,12 +94,30 @@ cat reports/self-host/latest.json
 The report records:
 
 - `cap.visible_reduction_percent`
-- `span.line_reduction_percent`
+- `environment.ast_outline.available`
+- `environment.ast_bro.available`
+- `span.heuristic.line_reduction_percent`
+- `span.auto.backend`
+- `span.auto.line_reduction_percent`
+- `span.auto.truncated`
 - `tap.pass_through_ok`
 - `fx.source_and_lockfile_summary_ok`
 - `composition.ok`
 
-For real release notes, synthetic self-host numbers are not enough. Add at least one real-workflow measurement from a noisy build, large search, compiler error, or JSONL pipeline.
+For community-facing notes, also run:
+
+```sh
+sh scripts/community-benchmark.sh
+```
+
+This writes:
+
+```text
+reports/community/latest.json
+reports/community/latest.md
+```
+
+Do not claim universal productivity improvement from local benchmark numbers. Present them as reproducible local measurements.
 
 ## Development Loop
 
@@ -113,7 +131,7 @@ Use this loop:
 6. Run focused tool tests.
 7. Push tool repo commits before updating or relying on pinned installer revisions.
 8. Run `sh scripts/production-check.sh`.
-9. Summarise changed behaviour, test results, pin status, and latest efficiency metrics.
+9. Summarise changed behaviour, test results, pin status, latest efficiency metrics, and whether community reports were refreshed.
 
 ## Limits
 

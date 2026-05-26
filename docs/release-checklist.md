@@ -24,6 +24,7 @@ Umbrella checks:
 - `docs/agent-rules.md` matches the individual repo guidance.
 - Benchmark document avoids unmeasured marketing claims.
 - `sh scripts/self-host-check.sh` passes and writes `reports/self-host/latest.json`.
+- `sh scripts/community-benchmark.sh` passes and writes `reports/community/latest.json` plus `reports/community/latest.md`.
 - `sh scripts/verify-pins.sh` fetches fresh remote refs and confirms `install.sh` pins match clean, synced sibling repos.
 - In a network-restricted sandbox, `VERIFY_PINS_FETCH=0 sh scripts/verify-pins.sh` is acceptable only as an explicitly reported offline fallback after the tool repos have been pushed.
 - `sh scripts/production-check.sh` passes from a clean umbrella repository before a production-ready tag. Run it directly, not under `cap`, because it already invokes `cap` internally.

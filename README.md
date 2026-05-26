@@ -22,10 +22,10 @@ Planned:
 ## Quick Start
 
 ```sh
-cargo install --git https://github.com/a19q3/cap.git --rev 95e6410d28079d749c1660e0bbc41b14acd69430
-cargo install --git https://github.com/a19q3/span.git --rev 20ebc4b1e139b5b82318d7aa328f806599744d0e
-cargo install --git https://github.com/a19q3/fx.git --rev b173721bd8ad0a77f0c6404e9bdc9a0d57e683ff
-cargo install --git https://github.com/a19q3/tap.git --rev 04d40f351b206bb48d23dd72fd3525ce24894f5a
+cargo install --git https://github.com/a19q3/cap.git --rev 42a4cd43ceeeef8d5fed804445ebe62134687f2d
+cargo install --git https://github.com/a19q3/span.git --rev d5b79ed5f7a6f9f116334797d3c48494535121b5
+cargo install --git https://github.com/a19q3/fx.git --rev b2d63b4c77d8e8c425b2387f7aa3c4657342594b
+cargo install --git https://github.com/a19q3/tap.git --rev b7b3c88049d85b22f91e152b61843c10b2cce944
 ```
 
 Or use:
@@ -41,9 +41,10 @@ The installer pins audited commits by default. Override `CAP_REV`, `SPAN_REV`, `
 ```text
 1. Use cap for commands with unknown or potentially large output.
 2. Use span instead of reading whole source files when a line, pattern, or symbol is known.
-3. Use fx around commands that may generate, rewrite, install, test, or migrate files.
-4. Use tap for pipeline inspection instead of dumping intermediate data.
-5. Prefer JSON/receipt modes when another tool or agent will consume the result.
+3. Use span --backend auto when ast-outline or ast-bro is installed and a stronger symbol body extractor is useful.
+4. Use fx around commands that may generate, rewrite, install, test, or migrate files.
+5. Use tap for pipeline inspection instead of dumping intermediate data.
+6. Prefer JSON/receipt modes when another tool or agent will consume the result.
 ```
 
 ## Examples
@@ -51,6 +52,7 @@ The installer pins audited commits by default. Override `CAP_REV`, `SPAN_REV`, `
 ```sh
 cap -- cargo test
 span --contains "unwrap()" src/
+span --backend auto --explain src/main.rs:42
 fx --receipt .fx/receipts/latest.json -- cargo test
 cat events.jsonl | tap --json-shape | jq '.level'
 ```
@@ -91,4 +93,6 @@ These tools reduce accidental verbosity, accidental scope expansion, and acciden
 - [Agent Rules](docs/agent-rules.md)
 - [Examples](docs/examples.md)
 - [Token-Saving Benchmark Plan](docs/token-saving-benchmark.md)
+- [AST Tool Cooperation](docs/ast-tool-cooperation.md)
+- [Community Report](docs/community-report.md)
 - [Release Checklist](docs/release-checklist.md)

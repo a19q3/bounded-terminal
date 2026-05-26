@@ -48,6 +48,23 @@ Use this report as a regression guard for:
 
 These numbers are allowed in development notes. Do not use them as public productivity claims without a real workflow measurement.
 
+## Community Benchmark
+
+Run:
+
+```sh
+sh scripts/community-benchmark.sh
+```
+
+The script writes:
+
+```text
+reports/community/latest.json
+reports/community/latest.md
+```
+
+Use this for community-facing examples because it records reproducible local measurements across command output, code context, file effects, and pipeline pass-through.
+
 ## Example Table
 
 | Scenario | Raw bytes | Bounded bytes | Evidence preserved | Notes |

@@ -3,3 +3,4 @@ target/
 /.cap/
 /.self-host/
 /reports/self-host/
+/reports/community/

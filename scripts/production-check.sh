@@ -48,9 +48,11 @@ main() {
 
     sh -n "$ROOT_DIR/install.sh"
     sh -n "$ROOT_DIR/scripts/self-host-check.sh"
+    sh -n "$ROOT_DIR/scripts/community-benchmark.sh"
     sh -n "$ROOT_DIR/scripts/verify-pins.sh"
     sh "$ROOT_DIR/scripts/verify-pins.sh"
     sh "$ROOT_DIR/scripts/self-host-check.sh"
+    sh "$ROOT_DIR/scripts/community-benchmark.sh"
     check_umbrella_clean
 
     printf 'production check passed\n'
