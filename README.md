@@ -93,6 +93,7 @@ These tools reduce accidental verbosity, accidental scope expansion, and acciden
 - [Agent Rules](docs/agent-rules.md)
 - [Examples](docs/examples.md)
 - [Token-Saving Benchmark Plan](docs/token-saving-benchmark.md)
+- [Blog: Context Budget Audit](docs/blog/context-budget-audit.md)
 - [AST Tool Cooperation](docs/ast-tool-cooperation.md)
 - [Community Report](docs/community-report.md)
 - [Release Checklist](docs/release-checklist.md)
