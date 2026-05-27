@@ -1,4 +1,6 @@
-# Bounded Terminal：把上下文当预算，而不是当垃圾桶
+# Bounded Terminal：显著减少 Agent 终端工作的 Token 浪费
+
+English version: [Cutting Token Waste in Agentic Terminal Work](context-budget-audit.en.md)
 
 过去很多年里，终端工作的基本形态很朴素：人想清楚要做什么，敲一个命令，看一段输出，再决定下一步。输出太长就 `less`，文件太大就 `grep`，命令太危险就先看一眼 `git status`。这套习惯对人类开发者相当有效，因为人会停下来判断，会记得刚才看过什么，也会在情况不对时把手从键盘上拿开。至少理论上如此。
 
@@ -18,15 +20,15 @@ command -> output
 intent -> command -> observation -> decision -> mutation -> verification
 ```
 
-这个循环里每一步都可能膨胀。输出会膨胀，代码上下文会膨胀，文件状态的不确定性会膨胀，pipeline 调试也会膨胀。上下文窗口不是垃圾桶；它更像一份预算。预算不是为了让人小气，而是为了把钱花在证据上，不花在噪声上。
+这个循环里每一步都可能膨胀。输出会膨胀，代码上下文会膨胀，文件状态的不确定性会膨胀，pipeline 调试也会膨胀。膨胀的直接成本就是 token：更多无关文本进入上下文，更多推理预算花在过滤噪声上，更多会话长度被历史包袱吃掉。上下文窗口不是垃圾桶；它更像一份预算。预算不是为了让人小气，而是为了把钱花在证据上，不花在噪声上。
 
 我们做 `cap`、`span`、`fx`、`tap`，就是从这个背景出发。它们不是为了再造一个“AI coding assistant”。老实说，这个世界已经不缺会发光的助手了，缺的是几个不会乱说话、能把终端工作管住的小工具。
 
-这个组合的目标很窄：
+这个组合的目标很窄，但收益可以很大：
 
 > 让命令输出、代码上下文、文件副作用和管道数据流变得有界、可观察、可复现。
 
-这听起来不性感。但大多数 agent 开发过程里的 token 浪费，并不是因为模型喜欢废话，而是因为我们把终端当成了无底洞：测试输出一泻千里，源码一读就是整文件，命令改了什么没人知道，pipeline 调试靠把中间结果 dump 到屏幕上。然后大家开始责怪上下文窗口，仿佛是窗户的问题。
+这听起来不性感，但它直接影响 token 使用。大多数 agent 开发过程里的 token 浪费，并不是因为模型喜欢废话，而是因为我们把终端当成了无底洞：测试输出一泻千里，源码一读就是整文件，命令改了什么没人知道，pipeline 调试靠把中间结果 dump 到屏幕上。然后大家开始责怪上下文窗口，仿佛是窗户的问题。
 
 一个很普通的开发回合大概是这样：测试失败了，agent 需要看错误；错误指向某个文件某一行，agent 需要看周围代码；修完以后跑 formatter 或测试，agent 需要知道有没有顺手改到 lockfile 或生成文件；如果问题出在日志或 JSONL pipeline，agent 还需要理解数据流形状。这里每一步都有一个“看太多”的陷阱：
 
@@ -54,7 +56,7 @@ producer | jq | sink   -> 中间数据可能被 dump
 
 ## Token 审计的基本原则
 
-我们不直接声称“节省了多少 token”。原因很简单：token 取决于模型 tokenizer、语言、符号密度和输出格式。Rust 编译错误、JSONL、中文说明、ANSI 日志，token/byte 比例都不一样。
+我们确实把“大幅减少 token 浪费”当成核心收益之一，但不把它说成一个脱离测量的神奇百分比。原因很简单：token 取决于模型 tokenizer、语言、符号密度和输出格式。Rust 编译错误、JSONL、中文说明、ANSI 日志，token/byte 比例都不一样。
 
 所以我们先审更稳定的东西：
 
@@ -81,7 +83,7 @@ awk -v raw="$raw_bytes" -v shown="$visible_bytes" '
 '
 ```
 
-这不是精算。它只是一个足够诚实的工程仪表盘：先防止 accidental context expansion，再决定是否值得做更细的 tokenizer 级测量。
+这不是精算。它只是一个足够诚实的工程仪表盘：先防止 accidental context expansion，先把 80% 以上明显浪费挡掉，再决定是否值得做更细的 tokenizer 级测量。
 
 ## `cap`：不要让命令输出淹没会话
 
@@ -231,7 +233,7 @@ sed -n '1,120p' reports/community/latest.md
 
 > 在 noisy command 和 over-broad source inspection 场景里，本地样本显示可见上下文减少约 90%+；在真实 agent 开发会话里，整体减少 50-85% accidental context expansion 是一个谨慎但可期待的区间，具体取决于工作流。
 
-如果一个会话本来就只跑短命令、读小文件，这套工具不会神奇地节省什么。它最多让你显得更有纪律，当然这在软件工程里已经相当罕见。
+如果一个会话本来就只跑短命令、读小文件，这套工具不会神奇地节省什么。但只要工作流里有 noisy test、全仓搜索、长文件、生成脚本或 pipeline 调试，省 token 就不是边角收益，而是主要收益。它同时让人显得更有纪律，当然这在软件工程里已经相当罕见。
 
 ## 我会怎样用它们
 
@@ -273,26 +275,4 @@ intent -> command -> observation -> decision -> mutation -> verification
 
 如果这个循环里每一步都无界，agent 就会浪费上下文，人类就会浪费耐心。两者都很贵，只是人类通常收费更高。
 
-## 最后：不要崇拜 token
-
-Token 是账单单位，不是工程目标。真正的目标是：
-
-- 少看无关输出；
-- 少读无关代码；
-- 更快知道命令造成了什么；
-- 调试数据流时不破坏数据流；
-- 保留足够证据，能复查，而不是凭感觉。
-
-所以我更愿意把这套工具叫：
-
-```text
-bounded terminal primitives
-```
-
-而不是：
-
-```text
-AI productivity toolkit
-```
-
-前者像工具，后者像会议室里的贴纸。我们已经有太多贴纸了。
+这也是为什么我更愿意把它叫 `bounded terminal primitives`，而不是 `AI productivity toolkit`。前者像工具，后者像会议室里的贴纸。我们已经有太多贴纸了。
