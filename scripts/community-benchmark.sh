@@ -19,6 +19,10 @@ require() {
     fi
 }
 
+make_work_dir() {
+    mktemp -d "${TMPDIR:-/tmp}/bounded-terminal-community.XXXXXX"
+}
+
 json_number() {
     key=$1
     file=$2
@@ -47,12 +51,13 @@ line_count() {
     wc -l < "$1" | tr -d ' '
 }
 
-ensure_bins() {
+build_bins() {
+    mkdir -p "$BIN_DIR"
     for tool in cap fx span tap; do
-        if [ ! -x "$BIN_DIR/$tool" ]; then
-            sh "$ROOT_DIR/scripts/self-host-check.sh"
-            return
-        fi
+        repo="$PARENT_DIR/$tool"
+        [ -d "$repo" ] || fail "missing sibling repo: $repo"
+        (cd "$repo" && cargo build --quiet)
+        cp "$repo/target/debug/$tool" "$BIN_DIR/$tool"
     done
 }
 
@@ -203,16 +208,26 @@ EOF
 }
 
 main() {
+    require cargo
     require cmp
+    require cp
+    require date
     require git
+    require head
+    require mkdir
+    require mktemp
     require sed
+    require tr
     require wc
 
-    ensure_bins
+    build_bins
 
-    work="${TMPDIR:-/tmp}/bounded-terminal-community.$$"
-    mkdir "$work"
-    trap 'rm -rf "$work"' EXIT HUP INT TERM
+    work=$(make_work_dir) || fail "failed to create temporary work directory"
+    cleanup() {
+        rm -rf "$work"
+    }
+    trap cleanup EXIT
+    trap 'cleanup; exit 130' HUP INT TERM
 
     measure_cap "$work"
     measure_span "$work"

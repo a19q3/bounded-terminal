@@ -20,6 +20,10 @@ require() {
     fi
 }
 
+make_work_dir() {
+    mktemp -d "${TMPDIR:-/tmp}/bounded-terminal-self-host.XXXXXX"
+}
+
 json_number() {
     key=$1
     file=$2
@@ -225,17 +229,26 @@ EOF
 
 main() {
     require cargo
+    require cp
+    require date
     require git
-    require sed
     require grep
+    require head
+    require mkdir
+    require mktemp
+    require sed
+    require tr
     require cmp
     require wc
 
     build_tools
 
-    work="${TMPDIR:-/tmp}/bounded-terminal-self-host.$$"
-    mkdir "$work"
-    trap 'rm -rf "$work"' EXIT HUP INT TERM
+    work=$(make_work_dir) || fail "failed to create temporary work directory"
+    cleanup() {
+        rm -rf "$work"
+    }
+    trap cleanup EXIT
+    trap 'cleanup; exit 130' HUP INT TERM
 
     check_cap "$work"
     check_span "$work"

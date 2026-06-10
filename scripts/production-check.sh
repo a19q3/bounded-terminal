@@ -50,7 +50,9 @@ main() {
     sh -n "$ROOT_DIR/scripts/self-host-check.sh"
     sh -n "$ROOT_DIR/scripts/community-benchmark.sh"
     sh -n "$ROOT_DIR/scripts/verify-pins.sh"
+    sh -n "$ROOT_DIR/scripts/verify-doc-pins.sh"
     sh "$ROOT_DIR/scripts/verify-pins.sh"
+    sh "$ROOT_DIR/scripts/verify-doc-pins.sh"
     sh "$ROOT_DIR/scripts/self-host-check.sh"
     sh "$ROOT_DIR/scripts/community-benchmark.sh"
     check_umbrella_clean
