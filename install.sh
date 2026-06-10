@@ -20,7 +20,7 @@ require cargo
 
 CAP_REV=${CAP_REV:-2be5acff6ff01b70b47adb7527e914e8547633ff}
 SPAN_REV=${SPAN_REV:-9e454d5be29c2d657decee28901872fff016650d}
-FX_REV=${FX_REV:-67909984e060598b9e3a36e6a31cd98cde431436}
+FX_REV=${FX_REV:-85ac8663e0edb174c1fb6ece2cd9f20635e75766}
 TAP_REV=${TAP_REV:-e6f7db29c0ac32812c0e7c95f8d17bf951172a3a}
 
 install_tool cap https://github.com/a19q3/cap.git "$CAP_REV"
