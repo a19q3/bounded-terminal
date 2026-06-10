@@ -1,6 +1,6 @@
 # Bounded Terminal: Cutting Token Waste in Agentic Terminal Work
 
-Chinese version: [Bounded Terminal: significant token reduction for agent terminal work](context-budget-audit.md)
+GitHub: [a19q3/bounded-terminal.git](https://github.com/a19q3/bounded-terminal.git)
 
 For many years, terminal work had a simple shape: a human decided what to do, ran a command, read some output, and chose the next step. If output was too long, we used `less`. If a file was too large, we used `grep`. If a command looked risky, we checked `git status` first. This discipline worked because humans pause, filter, remember context, and occasionally remove their hands from the keyboard. In theory, at least.
 
@@ -113,7 +113,7 @@ awk -v raw="$raw_bytes" -v shown="$visible_bytes" '
 '
 ```
 
-This is not precision accounting. It is a pragmatic instrument panel: first remove the obvious context waste, then decide whether tokenizer-level measurement is worth the extra machinery.
+This is not precision accounting. It is a pragmatic instrument panel: first remove the obvious context waste, then decide whether tokenizer-level measurement is worth the extra machinery. The practical claim is stronger than "nicer logs": bounded terminal primitives move high-volume, low-decision-value text out of the agent's immediate context while keeping full evidence recoverable. That is exactly the kind of waste that usually consumes context before it improves the answer.
 
 ## `cap`: Bound Noisy Command Output
 
@@ -136,7 +136,7 @@ visible reduction:    98%
 rough tokens avoided: about 1,775 tokens
 ```
 
-That does not mean every project saves 98%. It means noisy output is a large and easy class of accidental token expansion, and `cap` blocks it early.
+That does not mean every project saves 98%. It means noisy output is a large and easy class of accidental token expansion, and `cap` blocks it early. In token-budget terms, this is the cheapest win: do not ask the model to carry thousands of bytes of log material when the decision usually depends on the exit code, the failure focus, and the path to the retained full log.
 
 ## `span`: Bound Source Context
 
@@ -164,7 +164,7 @@ span heuristic:       84 lines   -> 92% line reduction
 span auto backend:    20 lines   -> 98% line reduction via ast-outline
 ```
 
-Using a rough 50-80 characters per line and about four characters per token for English/code-like output, avoiding a thousand unnecessary source lines can easily avoid tens of thousands of tokens. The exact number varies. The direction does not.
+Using a rough 50-80 characters per line and about four characters per token for English/code-like output, avoiding a thousand unnecessary source lines can easily avoid tens of thousands of tokens. The exact number varies. The direction does not. Source context is often the most expensive hidden leak in an agent session, because one over-broad file read stays in the conversation even after the relevant function has been found.
 
 ## `fx`: Stop Guessing What Changed
 
@@ -253,7 +253,9 @@ These are local measurements, not universal productivity claims. A cautious stat
 
 > In noisy command and over-broad source inspection scenarios, local samples show roughly 90%+ visible context reduction. Across real agent development sessions, a 50-85% reduction in accidental context expansion is a plausible target range, depending heavily on workflow.
 
-If a session only runs tiny commands and reads small files, these tools will not magically save much. But if the workflow includes noisy tests, broad searches, long files, generators, or pipeline debugging, token reduction becomes a primary benefit rather than a nice side effect.
+The more operational statement is this: bounded terminal work can make token saving a structural property of the workflow rather than a matter of agent self-control. Instead of hoping the agent remembers to be frugal, the terminal surface returns compact evidence by default and stores the bulky evidence outside the prompt.
+
+If a session only runs tiny commands and reads small files, these tools will not magically save much. But if the workflow includes noisy tests, broad searches, long files, generators, or pipeline debugging, token reduction becomes a primary benefit rather than a nice side effect. In those settings, the claim is not merely that fewer tokens are printed once; it is that fewer unnecessary tokens are dragged through every later reasoning step.
 
 ## How I Use Them
 

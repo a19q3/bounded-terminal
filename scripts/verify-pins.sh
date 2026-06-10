@@ -35,12 +35,25 @@ check_tool() {
         fail "$tool pin mismatch: install.sh has $expected but local HEAD is $actual"
     fi
 
-    status=$(git -C "$repo" status -sb)
-    case "$status" in
-        *ahead*|*behind*|*'??'*|*' M '*|*'M  '*|*' A '*|*'A  '*|*' D '*|*'D  '*)
-            fail "$tool is not clean and synced: $status"
+    if [ "${VERIFY_PINS_FETCH:-1}" = "1" ]; then
+        remote_head=$(git -C "$repo" rev-parse refs/remotes/origin/main)
+        if [ "$actual" != "$remote_head" ]; then
+            fail "$tool is not synced with origin/main: local HEAD is $actual but origin/main is $remote_head"
+        fi
+    fi
+
+    branch_status=$(git -C "$repo" status -sb)
+    case "$branch_status" in
+        *ahead*|*behind*|*gone*)
+            fail "$tool is not clean and synced: $branch_status"
             ;;
     esac
+
+    dirty_status=$(git -C "$repo" status --porcelain=v1)
+    if [ -n "$dirty_status" ]; then
+        fail "$tool is not clean and synced: $branch_status
+$dirty_status"
+    fi
 
     printf '%s pin ok: %s\n' "$tool" "$actual"
 }
