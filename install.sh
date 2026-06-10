@@ -18,7 +18,7 @@ install_tool() {
 
 require cargo
 
-CAP_REV=${CAP_REV:-2be5acff6ff01b70b47adb7527e914e8547633ff}
+CAP_REV=${CAP_REV:-b5d87b9e3d178aaf2122f61836c0c5e3f0c26f9b}
 SPAN_REV=${SPAN_REV:-9e454d5be29c2d657decee28901872fff016650d}
 FX_REV=${FX_REV:-85ac8663e0edb174c1fb6ece2cd9f20635e75766}
 TAP_REV=${TAP_REV:-4eb045e40c2cbad8f98509cb5abee6247a3afc5c}

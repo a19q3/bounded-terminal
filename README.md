@@ -22,7 +22,7 @@ Planned:
 ## Quick Start
 
 ```sh
-cargo install --git https://github.com/a19q3/cap.git --rev 2be5acff6ff01b70b47adb7527e914e8547633ff
+cargo install --git https://github.com/a19q3/cap.git --rev b5d87b9e3d178aaf2122f61836c0c5e3f0c26f9b
 cargo install --git https://github.com/a19q3/span.git --rev 9e454d5be29c2d657decee28901872fff016650d
 cargo install --git https://github.com/a19q3/fx.git --rev 85ac8663e0edb174c1fb6ece2cd9f20635e75766
 cargo install --git https://github.com/a19q3/tap.git --rev 4eb045e40c2cbad8f98509cb5abee6247a3afc5c
